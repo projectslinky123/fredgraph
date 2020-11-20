@@ -1,7 +1,7 @@
 from flask import escape
 import math
 import os
-from config import config
+from config import Config
 import time
 import matplotlib.pyplot as plt
 import requests
@@ -30,10 +30,10 @@ def send_response(request):
 
 
 def getgraphdata(seriesid):
-    desc_request_url = config['FRED_SERIES_URL']
-    request_url = config['FRED_SERIES_DATA_URL']
+    desc_request_url = Config['FRED_SERIES_URL']
+    request_url = Config['FRED_SERIES_DATA_URL']
     payload = {"api_key": os.environ.get('fred_apikey'),
-               "series_id": seriesId,
+               "series_id": seriesid,
                "file_type": "json"}
     response1 = requests.get(desc_request_url, params=payload)
     data1 = response1.json()
