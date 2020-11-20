@@ -1,4 +1,11 @@
 from flask import escape
+import math
+import os
+from config import config
+import time
+import matplotlib.pyplot as plt
+import requests
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 def send_response(request):
     """HTTP Cloud Function.
@@ -18,5 +25,24 @@ def send_response(request):
     elif request_args and 'name' in request_args:
         name = request_args['name']
     else:
-        name = 'World'
+        name = getgraphdata("W006RC1A027NBEA")
     return 'Hello {}!'.format(escape(name))
+
+
+def getgraphdata(seriesid):
+    desc_request_url = config['FRED_SERIES_URL']
+    request_url = config['FRED_SERIES_DATA_URL']
+    payload = {"api_key": os.environ.get('fred_apikey'),
+               "series_id": seriesId,
+               "file_type": "json"}
+    response1 = requests.get(desc_request_url, params=payload)
+    data1 = response1.json()
+    response = requests.get(request_url, params=payload)
+    data = response.json()
+    xlist = []
+    ylist = []
+    for k in range(len(data["observations"])):
+        xlist.append(data["observations"][k]["date"])
+        ylist.append(math.floor(float(data["observations"][k]["value"])))
+
+    return data1["seriess"][0]["title"], data, "year", data1["seriess"][0]["units"], xlist, ylist
