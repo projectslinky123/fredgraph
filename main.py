@@ -1,8 +1,10 @@
 from flask import escape
 import math
 import os
+import io
 import requests
-
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 def send_response(request):
     """HTTP Cloud Function.
@@ -22,8 +24,10 @@ def send_response(request):
     elif request_args and 'name' in request_args:
         name = request_args['name']
     else:
-        name = getgraphdata("W006RC1A027NBEA")
-    return 'Hello {}!'.format(escape(name))
+        title, data, xaxisLabel, yaxisLabel, xlist, ylist = getgraphdata("W006RC1A027NBEA")
+        fig = create_figure("year", yaxisLabel, xlist, ylist)
+        results = fig
+    return 'Hello {}!'.format(escape(results))
 
 
 def getgraphdata(seriesid):
@@ -43,3 +47,32 @@ def getgraphdata(seriesid):
         ylist.append(math.floor(float(data["observations"][k]["value"])))
 
     return data1["seriess"][0]["title"]
+
+
+def create_figure(xtitle, ytitle, x, y):
+    fig = plt.figure(figsize=(15, 5))
+    axis = fig.add_subplot(1, 1, 1)
+    axis.set_xlabel(xtitle)
+    axis.set_ylabel(ytitle)
+    axis.grid()
+    axis.plot(list(map(int, y)))
+    xlabels = [""]
+    xticks = [0]
+    spacing = len(x)//10
+    for i in range(11):
+        xticks.append(spacing*i)
+        xlabels.append(x[spacing*i])
+
+    axis.set_xticks(xticks)
+    axis.set_xticklabels(xlabels, rotation=70)
+    fig.tight_layout()
+
+    # Convert plot to PNG image
+    pngImage = io.BytesIO()
+    FigureCanvas(fig).print_png(pngImage)
+
+    # Encode PNG image to base64 string
+    pngImageB64String = "data:image/png;base64,"
+    pngImageB64String += base64.b64encode(pngImage.getvalue()).decode('utf8')
+    return pngImageB64String
+
