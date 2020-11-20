@@ -46,7 +46,7 @@ def getgraphdata(seriesid):
         xlist.append(data["observations"][k]["date"])
         ylist.append(math.floor(float(data["observations"][k]["value"])))
 
-    return data1["seriess"][0]["title"]
+    return data1["seriess"][0]["title"], data, "year", data1["seriess"][0]["units"], xlist, ylist
 
 
 def create_figure(xtitle, ytitle, x, y):
