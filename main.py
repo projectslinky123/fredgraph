@@ -4,6 +4,7 @@ import os
 from config import Config
 import requests
 
+
 def send_response(request):
     """HTTP Cloud Function.
     Args:
@@ -42,4 +43,4 @@ def getgraphdata(seriesid):
         xlist.append(data["observations"][k]["date"])
         ylist.append(math.floor(float(data["observations"][k]["value"])))
 
-    return data1["seriess"][0]["title"], data, "year", data1["seriess"][0]["units"], xlist, ylist
+    return data1["seriess"][0]["title"]
