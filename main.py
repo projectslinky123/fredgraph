@@ -2,10 +2,7 @@ from flask import escape
 import math
 import os
 from config import Config
-import time
-import matplotlib.pyplot as plt
 import requests
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 def send_response(request):
     """HTTP Cloud Function.
