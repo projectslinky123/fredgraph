@@ -1,7 +1,6 @@
 from flask import escape
 import math
 import os
-from config import Config
 import requests
 
 
@@ -28,9 +27,9 @@ def send_response(request):
 
 
 def getgraphdata(seriesid):
-    desc_request_url = Config['FRED_SERIES_URL']
-    request_url = Config['FRED_SERIES_DATA_URL']
-    payload = {"api_key": os.environ.get('fred_apikey'),
+    desc_request_url = "https://api.stlouisfed.org/fred/series"
+    request_url = "https://api.stlouisfed.org/fred/series/observations"
+    payload = {"api_key": os.environ.get('FRED_API_KEY'),
                "series_id": seriesid,
                "file_type": "json"}
     response1 = requests.get(desc_request_url, params=payload)
