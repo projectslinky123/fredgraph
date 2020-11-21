@@ -50,7 +50,7 @@ def getgraphdata(seriesid):
     xlist = []
     ylist = []
     for k in range(len(data["observations"])):
-        xlist.append(data["observations"][k]["date"][:5])
+        xlist.append(data["observations"][k]["date"][:4])
         ylist.append(math.floor(float(data["observations"][k]["value"])))
 
     return data1["seriess"][0]["title"], data, "year", data1["seriess"][0]["units"], xlist, ylist
