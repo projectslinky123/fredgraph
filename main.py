@@ -1,6 +1,7 @@
 from flask import escape
 import base64
 import math
+import json
 import os
 import io
 import requests
@@ -27,8 +28,13 @@ def send_response(request):
     else:
         title, data, xaxisLabel, yaxisLabel, xlist, ylist = getgraphdata("W006RC1A027NBEA")
         fig = create_figure("year", yaxisLabel, xlist, ylist)
-        results = fig
-    return 'Hello {}!'.format(escape(results))
+        results = { "title": title,
+                    "xaxisLabel": xaxisLabel,
+                    "yaxisLabel": yaxisLabel,
+                    "xlist": json.dumps(xlist),
+                    "ylist": json.dumps(ylist),
+                    "image": fig}
+    return 'Hello {}'.format(escape(json.dumps(results)))
 
 
 def getgraphdata(seriesid):
