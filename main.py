@@ -28,7 +28,7 @@ def send_response(request):
     else:
         title, data, xaxisLabel, yaxisLabel, xlist, ylist = getgraphdata("W006RC1A027NBEA")
         fig = create_figure("year", yaxisLabel, xlist, ylist)
-        results = { "title": title,
+        results = {"title": title,
                     "xaxisLabel": xaxisLabel,
                     "yaxisLabel": yaxisLabel,
                     "xlist": json.dumps(xlist),
@@ -50,7 +50,7 @@ def getgraphdata(seriesid):
     xlist = []
     ylist = []
     for k in range(len(data["observations"])):
-        xlist.append(data["observations"][k]["date"])
+        xlist.append(data["observations"][k]["date"][:5])
         ylist.append(math.floor(float(data["observations"][k]["value"])))
 
     return data1["seriess"][0]["title"], data, "year", data1["seriess"][0]["units"], xlist, ylist
